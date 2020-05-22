@@ -14,8 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cookie-parse": "*",
+    "cookie-parser": "^1.4.5",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
+    "express-handlebars": "^4.0.4",
     "morgan": "^1.10.0",
     "neo4j-driver": "^4.0.2",
     "node-neo4j": "^2.0.3"
