@@ -1,7 +1,33 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Protected Page</a>
+    <a class="navbar-brand" href="#">HumRel</a>
+    <form method="POST" action="/logout">
+        <div>
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </div>
+    </form>
 </nav>
 
 <div>
-    <h2>This page is only visible to logged in users</h2>
+    <form method="POST" action="/mainpage/search">
+        <div class="md-form mt-0">
+            <input name="search_string" class="form-control" type="text" placeholder="Search friends" aria-label="Search">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {{#if friends}}
+    <div>
+        <ul>
+        {{#each friends}}
+        <li class="list-group-item">{{this.name}} {{this.lastname}} <form  method="POST" action="/mainpage/invite" >
+            <input name="id" class="form-control d-none" type="text" placeholder="{{this.id}}>
+            <button type="submit " class="btn btn-success btn-small">Zaproś do znajomych</button>
+        </form></li>
+        {{/each}}
+        </ul>
+    </div>
+    {{/if}}
+
 </div>

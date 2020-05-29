@@ -1,3 +1,6 @@
+const dataBaseDriver = require("../components/dataBaseDriver.js")
+
+const searchFriends = require("../components/searchFriend.js")
 
 const crypto = require('crypto');
 
@@ -14,6 +17,7 @@ const generateAuthToken = () => {
 
 const requireAuth = (req, res, next) => {
     if (req.user) {
+        console.log(req.user)
         next();
     } else {
         res.render('login', {
@@ -24,9 +28,10 @@ const requireAuth = (req, res, next) => {
 };
 
 
-
 module.exports=function(app,driver)
 {
+
+    db = new dataBaseDriver(driver)
 
     app.use((req, res, next) => {
         // Get auth token from the cookies
@@ -52,13 +57,41 @@ module.exports=function(app,driver)
         res.render('mainpage');
     });
 
+    app.post('/logout', requireAuth, (req, res) => {
+        res.cookie('AuthToken', null);
+        res.redirect('/login');
 
-    app.post('/login', (req, res) => {
+    });
+
+
+    app.post('/login',async function(req, res) {
         const { email, password } = req.body;
         const hashedPassword = getHashedPassword(password);
+        console.log(email)
+        console.log(hashedPassword)
+        const session = driver.session()
+        try {
+        const result = await session.run(
+            'MATCH (a:Person {password: "'+hashedPassword+'", mail: "'+email+'"}) RETURN a'
+        )
+        war = 0
+        // here prase to json and send to html
+        result.records.forEach(element => {
+            war += 1
+        });
+        if(war != 0){
+            result.records.forEach(element => {
+                user = element.get(0)
+            });
+        }
+        else{
 
-        //fiding user in db
-        user = true
+            user = false
+
+        }
+    } finally {
+        await session.close()
+    }
 
         if (user) {
             const authToken = generateAuthToken();
@@ -83,7 +116,7 @@ module.exports=function(app,driver)
         res.render('register');
     });
 
-    app.post('/register', (req, res) => {
+    app.post('/register',async function (req, res) {
         const { email, firstName, lastName, password, confirmPassword } = req.body;
 
         // Check if the password and confirm password fields match
@@ -91,6 +124,17 @@ module.exports=function(app,driver)
 
             const hashedPassword = getHashedPassword(password);
             // Store user into the database if you are using one
+            const session = driver.session()
+            try {
+            const result = await session.run(
+                'CREATE (a:Person {mail: "'+ email +'" , password: "'+hashedPassword +'" , name: "'+ firstName + '", lastname: "' + lastName +'"})'
+            )
+            // here prase to json and send to html
+            } finally {
+            await session.close()
+            }
+            // on application exit:
+
             res.render('login', {
                 message: 'Registration Complete. Please login to continue.',
                 messageClass: 'alert-success'
@@ -102,6 +146,38 @@ module.exports=function(app,driver)
                 messageClass: 'alert-danger'
             });
         }
+    });
+
+
+    app.post('/mainpage/search',async  (req, res) => {
+        const { search_string } = req.body;
+        firends = []
+        const words = search_string.split(' ');
+        let query = "MATCH (m:Person) WHERE"
+        words.forEach(e => {
+            query += " m.name CONTAINS '"+ e +"' OR m.lastname CONTAINS '"+e +"' OR ";
+        })
+        query  = query.slice(0, -3)
+        query += " RETURN m"
+
+        const session = driver.session()
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                firends.push(element._fields[0].properties)
+            });
+        }
+        finally {
+            await session.close()
+        }
+        console.log(firends)
+        // firends.forEach(f =>
+        //     console.log(f))
+
+        res.render('mainpage',{
+        friends: firends
+    });
+
     });
     // app.get('/user',async function (req, res) {
 
