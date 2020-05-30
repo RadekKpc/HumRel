@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/mainpage/profil">Profil</a>
+        <a class="nav-link" href="/mainpage/profil">Your Profil<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/mainpage/friends">Friends</a>
@@ -24,8 +24,8 @@
           Settings
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item disabled" href="#">Layout</a>
-          <a class="dropdown-item disabled" href="#">Theme</a>
+          <a class="dropdown-item" href="#">Layout</a>
+          <a class="dropdown-item" href="#">Theme</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Profil</a>
         </div>
@@ -40,6 +40,7 @@
   </div>
 </nav>
 
+
 <br>
         {{#if message}}
             <div class="alert {{messageClass}}" role="alert">
@@ -47,6 +48,8 @@
             </div>
         {{/if}}
 <br>
+
+
 <div>
     <form method="POST" action="/mainpage/search">
         <div class="md-form mt-0">
@@ -64,8 +67,8 @@
         <ul>
         {{#each friends}}
         <li class="list-group-item" >{{this.name}} {{this.lastname}}
-            <form   style="display:inline;" method="POST" action="/mainpage/invite" >
-            <button  type="submit " class="btn btn-success btn-small">Invite</button>
+        <form   style="display:inline;" method="POST" action="/mainpage/profile" >
+            <button  type="submit " class="btn btn-success btn-small">View Profile</button>
             <input type = "hidden" name = "id" value = "{{this.id}}" />
         </form>
         </li>

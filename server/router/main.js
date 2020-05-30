@@ -116,6 +116,85 @@ module.exports=function(app,driver)
         res.render('register');
     });
 
+    app.get('/mainpage/friends', (req, res) => {
+
+        friends = []
+        let query = "MATCH (m:Person) WHERE"
+
+        //mock data
+
+        friends.push({
+            name: "Ktos",
+            lastname: "taki",
+            id: "13123120"
+        })
+        friends.push({
+            name: "Paweł",
+            lastname: "ASDAS",
+            id: "13123asda120"
+        })
+
+        // const session = driver.session()
+        // try {
+        //     const result = await session.run(query)
+        //     result.records.forEach(element => {
+        //         console.log(element)
+        //         firends.push(element._fields[0])
+        //     });
+        // }
+        // finally {
+        //     await session.close()
+        // }
+        // console.log(firends)
+
+        res.render('friends',{
+            friends: friends
+        });
+    });
+
+    app.post('/mainpage/profile', (req, res) => {
+
+        const { id } = req.body;
+        profil = {}
+        // mock
+
+        profil = {
+            name: "Radoslaw",
+            lastname: "Kopec",
+            description: "pare sloww os obiea sa dsa as dsa ",
+            age: "21",
+            friends: [
+                {
+                    name: "Paweł",
+                    lastname: "ASDAS",
+                    id: "13123asda120"
+                },
+                {
+                    name: "Paweł",
+                    lastname: "ASDAS",
+                    id: "13123asda120"
+                }
+            ]
+        }
+
+        // let query = "MATCH (m:Person) WHERE"
+
+        // const session = driver.session()
+        // try {
+        //     const result = await session.run(query)
+        //     result.records.forEach(element => {
+        //         console.log(element)
+        //         firends.push(element._fields[0])
+        //     });
+        // }
+        // finally {
+        //     await session.close()
+        // }
+        // console.log(firends)
+
+        res.render('profil',profil);
+    });
+
     app.post('/register',async function (req, res) {
         const { email, firstName, lastName, password, confirmPassword } = req.body;
 
@@ -173,8 +252,6 @@ module.exports=function(app,driver)
             await session.close()
         }
         console.log(firends)
-        // firends.forEach(f =>
-        //     console.log(f))
 
         res.render('mainpage',{
         friends: firends
