@@ -125,9 +125,10 @@ module.exports=function(app,driver)
             const hashedPassword = getHashedPassword(password);
             // Store user into the database if you are using one
             const session = driver.session()
+            id = Math.random()* 1000000000;
             try {
             const result = await session.run(
-                'CREATE (a:Person {mail: "'+ email +'" , password: "'+hashedPassword +'" , name: "'+ firstName + '", lastname: "' + lastName +'"})'
+                'CREATE (a:Person {id: "'+ id.toString() +'", mail: "'+ email +'" , password: "'+hashedPassword +'" , name: "'+ firstName + '", lastname: "' + lastName +'"})'
             )
             // here prase to json and send to html
             } finally {
@@ -149,7 +150,7 @@ module.exports=function(app,driver)
     });
 
 
-    app.post('/mainpage/search',async  (req, res) => {
+    app.post('/mainpage/search', requireAuth,async  (req, res) => {
         const { search_string } = req.body;
         firends = []
         const words = search_string.split(' ');
@@ -158,13 +159,14 @@ module.exports=function(app,driver)
             query += " m.name CONTAINS '"+ e +"' OR m.lastname CONTAINS '"+e +"' OR ";
         })
         query  = query.slice(0, -3)
-        query += " RETURN m"
+        query += " RETURN {name: m.name, lastname: m.lastname, id: m.id}"
 
         const session = driver.session()
         try {
             const result = await session.run(query)
             result.records.forEach(element => {
-                firends.push(element._fields[0].properties)
+                console.log(element)
+                firends.push(element._fields[0])
             });
         }
         finally {
@@ -179,6 +181,19 @@ module.exports=function(app,driver)
     });
 
     });
+
+    app.post('/mainpage/invite', requireAuth,async  (req, res) => {
+
+        message ="Wysłano zaproszenie"
+        messageClass = "alter alert-success"
+
+        res.render('mainpage',{
+        message: message,
+        messageClass: messageClass
+    });
+
+    });
+
     // app.get('/user',async function (req, res) {
 
     //     const session = driver.session()
