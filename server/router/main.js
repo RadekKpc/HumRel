@@ -17,7 +17,8 @@ const generateAuthToken = () => {
 
 const requireAuth = (req, res, next) => {
     if (req.user) {
-        console.log(req.user)
+        console.log("User authentiacted " + req.user.properties.name + " " + req.user.properties.lastname )
+        // console.log(req.user)
         next();
     } else {
         res.render('login', {
@@ -116,73 +117,72 @@ module.exports=function(app,driver)
         res.render('register');
     });
 
-    app.get('/mainpage/friends', (req, res) => {
+    app.get('/mainpage/friends', requireAuth, async (req, res) => {
 
         friends = []
-        let query = "MATCH (m:Person) WHERE"
 
-        //mock data
+        // //mock data
 
-        friends.push({
-            name: "Ktos",
-            lastname: "taki",
-            id: "13123120"
-        })
-        friends.push({
-            name: "Paweł",
-            lastname: "ASDAS",
-            id: "13123asda120"
-        })
+        // friends.push({
+        //     name: "Ktos",
+        //     lastname: "taki",
+        //     id: "13123120"
+        // })
+        // friends.push({
+        //     name: "Paweł",
+        //     lastname: "ASDAS",
+        //     id: "13123asda120"
+        // })
+        const authToken = req.cookies['AuthToken'];
+        id = authTokens[authToken].properties.id;
+        const session = driver.session()
+        query = 'MATCH (p:Person {id: "'+ id +'"})-[:FRIENDS]->(friend) return {name: friend.name, lastname: friend.lastname, id: friend.id}'
 
-        // const session = driver.session()
-        // try {
-        //     const result = await session.run(query)
-        //     result.records.forEach(element => {
-        //         console.log(element)
-        //         firends.push(element._fields[0])
-        //     });
-        // }
-        // finally {
-        //     await session.close()
-        // }
-        // console.log(firends)
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                friends.push(element._fields[0])
+            });
+        }
+        finally {
+            await session.close()
+        }
 
         res.render('friends',{
             friends: friends
         });
     });
 
-    app.post('/mainpage/profile', (req, res) => {
+    app.post('/mainpage/profile', requireAuth, async (req, res) => {
 
         const { id } = req.body;
         profil = {}
         // mock
 
-        profil = {
-            name: "Radoslaw",
-            lastname: "Kopec",
-            description: "pare sloww os obiea sa dsa as dsa ",
-            age: "21"   ,
-            job: "AGH",
-            facebook: "#",
-            instagram: "#",
-            linkedin: "#",
+        // profil = {
+        //     name: "Radoslaw",
+        //     lastname: "Kopec",
+        //     description: "pare sloww os obiea sa dsa as dsa ",
+        //     age: "21"   ,
+        //     job: "AGH",
+        //     facebook: "#",
+        //     instagram: "#",
+        //     linkedin: "#",
+        // }
+
+        let query = "MATCH (m:Person {id: '"+ id +"'}) RETURN {id: m.id, name: m.name, lastname: m.lastname, age: m.age, description: m.description, facebook: m.facebook, instagram: m.instagram, linkedin: m.linkedin, job: m.job }"
+
+        const session = driver.session()
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                profil = element._fields[0]
+            });
         }
-
-        // let query = "MATCH (m:Person) WHERE"
-
-        // const session = driver.session()
-        // try {
-        //     const result = await session.run(query)
-        //     result.records.forEach(element => {
-        //         console.log(element)
-        //         firends.push(element._fields[0])
-        //     });
-        // }
-        // finally {
-        //     await session.close()
-        // }
-        // console.log(firends)
+        finally {
+            await session.close()
+        }
+        console.log(profil)
 
         res.render('profil',profil);
     });
@@ -253,9 +253,26 @@ module.exports=function(app,driver)
 
     app.post('/mainpage/invite', requireAuth,async  (req, res) => {
 
-            message ="Wysłano zaproszenie"
-            messageClass = "alter alert-success"
+        message ="Wysłano zaproszenie"
+        messageClass = "alter alert-success"
+        const { id } = req.body
+        const authToken = req.cookies['AuthToken'];
 
+        your_id = authTokens[authToken].properties.id;
+
+
+        query = 'MATCH (a:Person),(b:Person) WHERE a.id ="' + your_id + '"  AND b.id = "' + id + '" CREATE (a)-[r:INVITE]->(b)'
+
+        const session = driver.session()
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                console.log(element)
+            });
+        }
+        finally {
+            await session.close()
+        }
             res.render('mainpage',{
             message: message,
             messageClass: messageClass
@@ -272,6 +289,77 @@ module.exports=function(app,driver)
         console.log(authTokens[authToken])
         console.log(user)
         res.render('profil',user);
+    });
+    app.get('/mainpage/notifications', requireAuth,async  (req, res) => {
+
+        const authToken = req.cookies['AuthToken'];
+
+        id = authTokens[authToken].properties.id;
+
+        invites = []
+
+
+        const session = driver.session()
+        query = 'MATCH (p:Person {id: "'+ id +'"})<-[:INVITE]-(friend) return {name: friend.name, lastname: friend.lastname, id: friend.id}'
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                console.log(element)
+                invites.push(element._fields[0])
+            });
+        }
+        finally {
+            await session.close()
+        }
+        console.log(invites)
+
+
+        res.render('notifications',{
+            invites: invites
+        });
+    });
+
+    app.post('/mainpage/accept_invite', requireAuth,async  (req, res) => {
+
+        const authToken = req.cookies['AuthToken'];
+
+        const { id, type, invites } = req.body;
+
+        your_id = authTokens[authToken].properties.id;
+
+        query = 'MATCH (p:Person {id: "'+ id +'"})-[r:INVITE]->(p2:Person {id: "'+ your_id +'"}) DELETE r'
+        const session = driver.session()
+        try {
+            const result = await session.run(query)
+            result.records.forEach(element => {
+                console.log(element)
+            });
+        }
+        finally {
+            await session.close()
+        }
+
+        if(type == "accept"){
+            query1 = 'MATCH (a:Person {id: "'+ id +'"}),(b:Person {id: "'+ your_id +'"}) CREATE (a)<-[r:FRIENDS]-(b)'
+            query2 = 'MATCH (a:Person {id: "'+ id +'"}),(b:Person {id: "'+ your_id +'"}) CREATE (a)-[r:FRIENDS]->(b)'
+            const session = driver.session()
+        try {
+            await session.run(query1)
+            await session.run(query2)
+        }
+        finally {
+            await session.close()
+        }
+        console.log("Akceptuje "+ id )
+        }
+        if(type == "reject"){
+            console.log("Odrzucam "+ id )
+        }
+
+        res.render('notifications',{
+            invites: invites
+        });
+
     });
 
     // app.get('/user',async function (req, res) {
