@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/mainpage/profil">Your Profil<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/mainpage/my_profile">Your Profil<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/mainpage/friends">Friends</a>
@@ -43,5 +43,20 @@
 <br>
 
 <div class="col-xs-1 center-block">
-<img src="https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg" alt="{{name}} {{lastname}}">
+<div class="card" style="width: 18rem;">
+  <img src="https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg" class="card-img-top" alt="{{name}} {{lastname}}">
+  <div class="card-body">
+    <h5 class="card-title">{{name}} {{lastname}}</h5>
+    <p class="card-text">{{description}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Age: {{age}}</li>
+    <li class="list-group-item">University {{job}}</li>
+  </ul>
+  <div class="card-body">
+    <a href={{facebook}} class="card-link">Facebook</a>
+    <a href={{instagram}} class="card-link">Instagram</a>
+    <a href={{linkedin}} class="card-link">Linkedin</a>
+  </div>
+</div>
 </div>

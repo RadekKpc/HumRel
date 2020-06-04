@@ -162,19 +162,11 @@ module.exports=function(app,driver)
             name: "Radoslaw",
             lastname: "Kopec",
             description: "pare sloww os obiea sa dsa as dsa ",
-            age: "21",
-            friends: [
-                {
-                    name: "Paweł",
-                    lastname: "ASDAS",
-                    id: "13123asda120"
-                },
-                {
-                    name: "Paweł",
-                    lastname: "ASDAS",
-                    id: "13123asda120"
-                }
-            ]
+            age: "21"   ,
+            job: "AGH",
+            facebook: "#",
+            instagram: "#",
+            linkedin: "#",
         }
 
         // let query = "MATCH (m:Person) WHERE"
@@ -207,7 +199,7 @@ module.exports=function(app,driver)
             id = Math.random()* 1000000000;
             try {
             const result = await session.run(
-                'CREATE (a:Person {id: "'+ id.toString() +'", mail: "'+ email +'" , password: "'+hashedPassword +'" , name: "'+ firstName + '", lastname: "' + lastName +'"})'
+                'CREATE (a:Person {id: "'+ id.toString() +'", mail: "'+ email +'" , password: "'+hashedPassword +'" , name: "'+ firstName + '", lastname: "' + lastName +'", date_of_account: "'+ Date.now() +'", description: " ", facebook: "#", instagram: "#", linkedin: "#", age: " ", job: "xxxxx" })'
             )
             // here prase to json and send to html
             } finally {
@@ -261,14 +253,25 @@ module.exports=function(app,driver)
 
     app.post('/mainpage/invite', requireAuth,async  (req, res) => {
 
-        message ="Wysłano zaproszenie"
-        messageClass = "alter alert-success"
+            message ="Wysłano zaproszenie"
+            messageClass = "alter alert-success"
 
-        res.render('mainpage',{
-        message: message,
-        messageClass: messageClass
+            res.render('mainpage',{
+            message: message,
+            messageClass: messageClass
+        });
+
     });
 
+    app.get('/mainpage/my_profile', requireAuth,async  (req, res) => {
+
+        const authToken = req.cookies['AuthToken'];
+
+        user = authTokens[authToken].properties;
+        user.password = "#"
+        console.log(authTokens[authToken])
+        console.log(user)
+        res.render('profil',user);
     });
 
     // app.get('/user',async function (req, res) {
