@@ -33,3 +33,8 @@ Uruchomienie serwera aplikacji:
 * cd server
 * npm install
 * node app.js
+
+Przygotowane konto do testów:
+
+login: test@test.com
+hasło: 1234
