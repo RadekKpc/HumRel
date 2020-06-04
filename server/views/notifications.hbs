@@ -40,6 +40,7 @@
   </div>
 </nav>
 
+
 <br>
         {{#if message}}
             <div class="alert {{messageClass}}" role="alert">
@@ -48,6 +49,8 @@
         {{/if}}
 <br>
 <div>
+
+
     <form method="POST" action="/mainpage/search">
         <div class="md-form mt-0">
             <input name="search_string" class="form-control" type="text" placeholder="Search friends" aria-label="Search">
@@ -59,14 +62,22 @@
     </form>
     <br>
     <br>
-    {{#if friends}}
+    {{#if invites}}
     <div>
         <ul>
-        {{#each friends}}
-        <li class="list-group-item" >{{this.name}} {{this.lastname}}
-            <form   style="display:inline;" method="POST" action="/mainpage/invite" >
-            <button  type="submit " class="btn btn-success btn-small">Invite</button>
+        {{#each invites}}
+        <li class="list-group-item" >{{this.name}} {{this.lastname}} invites you to firends
+            <form   style="display:inline;" method="POST" action="/mainpage/accept_invite" >
+            <button  type="submit " class="btn btn-success btn-small" >Accept</button>
             <input type = "hidden" name = "id" value = "{{this.id}}" />
+            <input type = "hidden" name = "invites" value = "{{invites}}" />
+            <input type = "hidden" name = "type" value = "accept" />
+        </form>
+          <form   style="display:inline;" method="POST" action="/mainpage/accept_invite" >
+            <button  type="submit " class="btn btn-danger btn-small" >Not Accept</button>
+            <input type = "hidden" name = "id" value = "{{this.id}}" />
+            <input type = "hidden" name = "type" value = "reject" />
+            <input type = "hidden" name = "invites" value = "{{invites}}" />
         </form>
         </li>
         {{/each}}

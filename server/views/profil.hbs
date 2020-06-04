@@ -40,6 +40,7 @@
   </div>
 </nav>
 
+
 <br>
         {{#if message}}
             <div class="alert {{messageClass}}" role="alert">
@@ -47,31 +48,23 @@
             </div>
         {{/if}}
 <br>
-<div>
-    <form method="POST" action="/mainpage/search">
-        <div class="md-form mt-0">
-            <input name="search_string" class="form-control" type="text" placeholder="Search friends" aria-label="Search">
-        </div>
-        <div>
-            <br>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
-    <br>
-    <br>
-    {{#if friends}}
-    <div>
-        <ul>
-        {{#each friends}}
-        <li class="list-group-item" >{{this.name}} {{this.lastname}}
-            <form   style="display:inline;" method="POST" action="/mainpage/invite" >
-            <button  type="submit " class="btn btn-success btn-small">Invite</button>
-            <input type = "hidden" name = "id" value = "{{this.id}}" />
-        </form>
-        </li>
-        {{/each}}
-        </ul>
-    </div>
-    {{/if}}
+<br>
 
+<div class="col-xs-1 center-block">
+<div class="card" style="width: 18rem;">
+  <img src="https://pecb.com/conferences/wp-content/uploads/2017/10/no-profile-picture.jpg" class="card-img-top" alt="{{name}} {{lastname}}">
+  <div class="card-body">
+    <h5 class="card-title">{{name}} {{lastname}}</h5>
+    <p class="card-text">{{description}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Age: {{age}}</li>
+    <li class="list-group-item">Job {{job}}</li>
+  </ul>
+  <div class="card-body">
+    <a href={{facebook}} class="card-link">Facebook</a>
+    <a href={{instagram}} class="card-link">Instagram</a>
+    <a href={{linkedin}} class="card-link">Linkedin</a>
+  </div>
+</div>
 </div>

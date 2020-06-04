@@ -40,6 +40,8 @@
   </div>
 </nav>
 
+
+
 <br>
         {{#if message}}
             <div class="alert {{messageClass}}" role="alert">
@@ -47,6 +49,8 @@
             </div>
         {{/if}}
 <br>
+
+
 <div>
     <form method="POST" action="/mainpage/search">
         <div class="md-form mt-0">
@@ -64,8 +68,8 @@
         <ul>
         {{#each friends}}
         <li class="list-group-item" >{{this.name}} {{this.lastname}}
-            <form   style="display:inline;" method="POST" action="/mainpage/invite" >
-            <button  type="submit " class="btn btn-success btn-small">Invite</button>
+        <form   style="display:inline;" method="POST" action="/mainpage/profile" >
+            <button  type="submit " class="btn btn-success btn-small">View Profile</button>
             <input type = "hidden" name = "id" value = "{{this.id}}" />
         </form>
         </li>
