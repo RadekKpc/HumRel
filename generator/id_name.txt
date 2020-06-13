@@ -1,4 +1,4 @@
-String id_names = {
+String id_names[] = {
 "Tomasz_Kondratiuk_06746882583055867376",
 "Wiktor_Bogunia_05051826292660540513",
 "Tomasz_Boniek_41987491475262553639",

@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-public class Creator {
+public class PeopleCreator {
     private static String[] randomletters = {
         "a",
         "b",
@@ -262,13 +262,13 @@ public class Creator {
     };
 
     public void generateRandomPeople() throws IOException {
-        File customersOutput = new File("customers.txt");
+        File customersOutput = new File("people.txt");
         File idNameOutput = new File("id_name.txt");
         FileOutputStream fileOutputStream1 = new FileOutputStream(customersOutput);
         FileOutputStream fileOutputStream2 = new FileOutputStream(idNameOutput);
         BufferedWriter bufferedWriter1 = new BufferedWriter(new OutputStreamWriter(fileOutputStream1));
         BufferedWriter bufferedWriter2 = new BufferedWriter(new OutputStreamWriter(fileOutputStream2));
-        bufferedWriter2.write("String id_names = {");
+        bufferedWriter2.write("String id_names[] = {");
         bufferedWriter2.newLine();
         for (int i = 0; i < 200; i++) {
             String name = names[(int)(Math.random() * 1000) % names.length];

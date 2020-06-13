@@ -121,18 +121,6 @@ module.exports=function(app,driver)
 
         friends = []
 
-        // //mock data
-
-        // friends.push({
-        //     name: "Ktos",
-        //     lastname: "taki",
-        //     id: "13123120"
-        // })
-        // friends.push({
-        //     name: "Paweł",
-        //     lastname: "ASDAS",
-        //     id: "13123asda120"
-        // })
         const authToken = req.cookies['AuthToken'];
         id = authTokens[authToken].properties.id;
         const session = driver.session()
@@ -157,18 +145,6 @@ module.exports=function(app,driver)
 
         const { id } = req.body;
         profil = {}
-        // mock
-
-        // profil = {
-        //     name: "Radoslaw",
-        //     lastname: "Kopec",
-        //     description: "pare sloww os obiea sa dsa as dsa ",
-        //     age: "21"   ,
-        //     job: "AGH",
-        //     facebook: "#",
-        //     instagram: "#",
-        //     linkedin: "#",
-        // }
 
         let query = "MATCH (m:Person {id: '"+ id +"'}) RETURN {id: m.id, name: m.name, lastname: m.lastname, age: m.age, description: m.description, facebook: m.facebook, instagram: m.instagram, linkedin: m.linkedin, job: m.job }"
 
