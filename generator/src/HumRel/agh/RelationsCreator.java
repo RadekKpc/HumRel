@@ -2,7 +2,7 @@ package HumRel.agh;
 
 import java.io.*;
 
-public class Attr_Creator {
+public class RelationsCreator {
     String id_names[] = {
             "Tomasz_Kondratiuk_06746882583055867376",
             "Wiktor_Bogunia_05051826292660540513",
@@ -206,32 +206,8 @@ public class Attr_Creator {
             "Jan_Lubański_23738418212682535025",
             "Radosław_Kopeć_688230519820972"
     };
-    public String[] attributes = {
-            "Jedzenie_polskie",
-            "Jedzenie_japońskie",
-            "Jedzenie_francuskie",
-            "Jedzenie_włoskie",
-            "Jedzenie_niemieckie",
-            "Jedzenie_hinduskie",
-            "Gotowanie",
-            "Bieganie",
-            "Tenis",
-            "Piłka_nożna",
-            "Siatkówka",
-            "Joga",
-            "Czytanie_kryminałów",
-            "Jazda_na_rowerze",
-            "Sztuka",
-            "Imprezy",
-            "Koszykówka",
-            "Narciarstwo",
-            "Podróżowanie_stopem",
-            "Gra_na_instrumencie",
-            "Śpiewanie",
-            "Taniec"
-    };
-    public void generateAttToCreator() throws IOException {
-        File attrToCreatorsOutput = new File("attr_to_creator.txt");
+    public void generatePeopleRelations() throws IOException {
+        File attrToCreatorsOutput = new File("relations_creator.txt");
         FileOutputStream fileOutputStream = new FileOutputStream(attrToCreatorsOutput);
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
         bufferedWriter.write("CREATE");
