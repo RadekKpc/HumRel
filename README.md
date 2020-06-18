@@ -18,7 +18,8 @@
 * node.js
 * express.js
 * neo4j
-
+### DOKUMENTACJA
+https://github.com/RadekKpc/HumRel/blob/master/Uruchomienie-Kope%C4%87-Rados%C5%82aw-P%C5%82awecki-Pawe%C5%82.pdf
 ### INSTRUKCJA URUCHOMIENIA
 
 Przygotowanie bazy:
